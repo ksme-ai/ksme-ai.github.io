@@ -4,10 +4,12 @@
  * No email addresses, spreadsheet IDs or secrets belong in public frontend files.
  */
 const LEGACY_HEADERS = ['접수일시','접수번호','회사·기관명','담당자 이름','회신 이메일','전화번호','협력 방식','AI 적용 연구·업무 내용','필요한 자문·협력 내용','개인정보 이용 동의','검토 상태','담당자 메모','알림 메일 상태'];
-const HEADERS = [...LEGACY_HEADERS.slice(0,6),'문의·신청 유형','문의·신청 내용','추가 요청사항',...LEGACY_HEADERS.slice(9),'희망 일정','희망 장소','참석 대상·예상 인원','희망 교육 시간'];
-const VISIT_TYPES = ['방문회의','방문교육','방문 세미나'];
+const HEADERS = [...LEGACY_HEADERS.slice(0,6),'문의·신청 유형','문의·신청 내용','추가 요청사항',...LEGACY_HEADERS.slice(9),'희망 일정','희망 장소','참석 대상·예상 인원','희망 교육 시간','희망 교수','관심 분야'];
+const VISIT_TYPES = ['방문 세미나 요청','방문 교육 요청'];
 const TAB_NAME = '산학협력 문의';
-const TYPES = ['방문회의','방문교육','연구 주제 탐색','기술 자문','방문 세미나','공동연구','기타'];
+const TYPES = ["공동연구", "방문 세미나 요청", "방문 교육 요청", "기타"];
+// Keep aligned with the 26 members displayed in index.html.
+const PROFESSORS = ["이세진", "유용균", "임재혁", "최상헌", "송재복", "강남우", "김남중", "민경민", "손정우", "심주용", "오현석", "유승화", "이상승", "이수영", "이승철", "이덕진", "이진우", "전준구", "하종문", "현재상", "김태진", "정준하", "박찬희", "박범수", "양선웅", "김대겸"];
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')
@@ -73,7 +75,7 @@ function submitInquiry(raw) {
     const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,data.email.toLowerCase()).map(v=>(v+256).toString(16).slice(-2)).join('');
     const throttle='sender:'+hash;
     if(Number(cache.get(throttle)||0)>=4)return {ok:false,message:'같은 이메일로 문의가 여러 건 접수되었습니다. 잠시 후 다시 이용해주세요.'};
-    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기',data.preferredSchedule,data.visitLocation,data.audience,data.trainingDuration];
+    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기',data.preferredSchedule,data.visitLocation,data.audience,data.trainingDuration,data.professors.join(', '),data.interest];
     sheet.appendRow(row.map(safeCell_));
     SpreadsheetApp.flush();stored=true;
     const rowNumber=sheet.getLastRow();
@@ -85,13 +87,15 @@ function submitInquiry(raw) {
         to:recipient,
         replyTo:data.email,
         name:'산학협력 탐색그룹',
-        subject:'['+(visitLabel?visitLabel+' 신청':'산학협력 문의')+'] '+data.company+' · '+data.name,
+        subject:'['+data.types[0]+'] '+data.company+' · '+data.name,
         body:[
           '새로운 문의·신청이 접수되었습니다.',
           '', '회사·기관: '+data.company,'담당자: '+data.name,'회신 이메일: '+data.email,'전화번호: '+data.phone,
           '문의·신청 유형: '+(data.types.join(', ')||'미선택'),'',
-          '[문의·신청 내용]',data.research,'','[추가 요청사항]',data.advice||'미기재','',
-          ...(visitLabel?['[방문 신청 정보]','희망 일정: '+(data.preferredSchedule||'미기재'),'희망 장소: '+(data.visitLocation||'미기재'),'참석 대상·예상 인원: '+(data.audience||'미기재'),...(data.types.includes('방문교육')?['희망 교육 시간: '+(data.trainingDuration||'미기재')]:[]),'']:[]),
+          ...(data.types[0]!=='기타'?['희망 교수: '+(data.professors.join(', ')||'미지정'),'관심 분야: '+data.interest,'']:[]),
+          data.types[0]==='기타'?'[기타 문의 내용]':'[문의·신청 내용]',data.research,'',
+          ...(data.types[0]!=='기타'?['[추가 요청사항]',data.advice||'미기재','']:[]),
+          ...(visitLabel?['[방문 신청 정보]','희망 일정: '+(data.preferredSchedule||'미기재'),'희망 장소: '+(data.visitLocation||'미기재'),'참석 대상·예상 인원: '+(data.audience||'미기재'),...(data.types.includes('방문 교육 요청')?['희망 교육 시간: '+(data.trainingDuration||'미기재')]:[]),'']:[]),
           '접수번호: '+data.submissionId,
           '접수 목록: '+book.getUrl()+'#gid='+sheet.getSheetId()+'&range=A'+rowNumber,
           '이 메일에 답장하면 문의자의 이메일로 연결됩니다.'
@@ -119,7 +123,11 @@ function validate_(raw){
   if(!raw||typeof raw!=='object'||JSON.stringify(raw).length>16000)throw new Error('입력 내용을 확인해주세요.');
   if(raw.website)throw new Error('접수 요청을 확인하지 못했습니다.');
   const data={};
+  if(!Array.isArray(raw.types)||raw.types.length!==1||!TYPES.includes(raw.types[0]))throw new Error('신청 유형을 한 가지만 선택해주세요. 이전 양식을 열어 둔 경우 페이지를 새로고침해주세요.');
+  data.types=raw.types.slice();
+  const other=data.types[0]==='기타';
   [['company',120,true],['name',60,true],['email',254,true],['phone',30,true],['research',3000,true],['advice',3000,false]].forEach(([key,max,required])=>{
+    if(key==='advice'&&other){data[key]='';return;}
     if(typeof raw[key]!=='string')throw new Error('입력 내용을 확인해주세요.');
     data[key]=raw[key].trim();
     if((required&&!data[key])||data[key].length>max||/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/.test(data[key]))throw new Error('필수 항목과 입력 길이를 확인해주세요.');
@@ -128,16 +136,23 @@ function validate_(raw){
   if(!validEmail_(data.email))throw new Error('회신 이메일 주소를 확인해주세요.');
   if(!/^\+?[0-9\s().-]+$/.test(data.phone)||data.phone.replace(/\D/g,'').length<7||data.phone.replace(/\D/g,'').length>15)throw new Error('전화번호를 확인해주세요.');
   if(raw.consent!==true)throw new Error('문의 검토와 회신을 위한 개인정보 이용에 동의해주세요.');
-  if(!Array.isArray(raw.types)||raw.types.length>TYPES.length||raw.types.some(t=>!TYPES.includes(t)))throw new Error('문의·신청 유형을 확인해주세요.');
-  data.types=[...new Set(raw.types)];
-  // New optional fields default to blank for forms opened before this update.
+  data.interest='';data.professors=[];
+  if(!other){
+    if(typeof raw.interest!=='string'||!raw.interest.trim()||raw.interest.length>300||/[\u0000-\u001F]/.test(raw.interest))throw new Error('관심 분야를 한 줄로 입력해주세요.');
+    data.interest=raw.interest.trim();
+    const professors=raw.professors===undefined?[]:raw.professors;
+    if(!Array.isArray(professors)||professors.length>PROFESSORS.length||professors.some(name=>!PROFESSORS.includes(name)))throw new Error('교수진 명단에서 희망 교수를 선택해주세요.');
+    data.professors=[...new Set(professors)];
+  }
+  // Inactive fields are ignored so values from a previous selection cannot leak into a request.
   [['preferredSchedule',200],['visitLocation',200],['audience',200],['trainingDuration',100]].forEach(([key,max])=>{
-    const value=raw[key]===undefined?'':raw[key];
+    const active=key==='trainingDuration'?data.types[0]==='방문 교육 요청':VISIT_TYPES.includes(data.types[0]);
+    const value=!active||raw[key]===undefined?'':raw[key];
     if(typeof value!=='string'||value.length>max||/[\u0000-\u001F]/.test(value))throw new Error('방문 신청 정보의 입력 길이와 내용을 확인해주세요.');
     data[key]=value.trim();
   });
   if(!data.types.some(t=>VISIT_TYPES.includes(t)))data.preferredSchedule=data.visitLocation=data.audience='';
-  if(!data.types.includes('방문교육'))data.trainingDuration='';
+  if(!data.types.includes('방문 교육 요청'))data.trainingDuration='';
   if(typeof raw.submissionId!=='string'||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(raw.submissionId))throw new Error('페이지를 새로 열고 다시 시도해주세요.');
   data.submissionId=raw.submissionId;
   const elapsed=Date.now()-Number(raw.startedAt);

@@ -38,7 +38,7 @@
       openHelp.hidden = true;
       openPanel.classList.remove("standalone");
       openLink.textContent = "문의·신청 양식 새 창에서 열기 ↗";
-      frame.style.height = `${Math.min(3200, Math.max(600, Math.ceil(height)))}px`;
+      frame.style.height = `${Math.min(6000, Math.max(600, Math.ceil(height)))}px`;
     }
   });
 })();

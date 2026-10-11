@@ -19,6 +19,8 @@
     @media(max-width:600px){.submit-row p{flex:auto}.form-shell{padding:28px 20px}.choices{gap:8px 18px}.privacy{padding-left:28px}}
     .visit-details{border:1px solid var(--line);border-radius:4px;padding:20px;background:#f8faf5}.visit-details legend{padding:0 7px;margin:0}.visit-details>.field-help{margin:0 0 18px}.visit-details .form-grid{gap:20px}.field label #research-label{color:var(--ink)}
     @media(max-width:600px){.visit-details{padding:17px 14px}.form-shell h2{font-size:23px}}
+    .request-types{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.request-types label{border:1px solid var(--line);border-radius:4px;padding:11px 13px;line-height:1.6}.request-types label:has(input:checked){border-color:var(--green);background:#edf4ed;font-weight:700}.professor-picker{border:1px solid var(--line);border-radius:4px}.professor-picker summary{cursor:pointer;padding:13px 15px;font-size:16px;color:var(--green)}.professor-picker summary span{margin-left:12px;color:var(--muted)}.professor-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;padding:0 13px 13px}.professor-options label{display:flex;align-items:flex-start;gap:10px;padding:10px;background:#f8faf5;font-weight:400;line-height:1.6}.professor-options input{width:19px;height:19px;margin:4px 0 0;accent-color:var(--green);flex-shrink:0}.professor-options label>span{color:var(--ink)}.professor-options strong{display:block}.professor-affiliation{display:block;color:var(--muted);font-weight:400}.selected-professors{margin-top:9px}.professor-picker summary:focus-visible{outline:2px solid #287dba;outline-offset:3px}
+    @media(max-width:600px){.request-types{grid-template-columns:1fr}.professor-options{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
   </style>
 </head>
@@ -26,7 +28,7 @@
   <div class="form-shell">
     <div id="form-view">
       <h2>산학협력 문의·방문 신청 <span id="preview-label" class="preview-label" hidden>미리보기</span></h2>
-      <p class="form-intro">산학협력 문의, 방문회의, 방문교육을 신청하실 수 있습니다.</p>
+      <p class="form-intro">공동연구, 방문 세미나, 방문 교육에 관한 문의를 받습니다.</p>
       <p class="required"><span>*</span> 필수 항목</p>
       <form id="inquiry" novalidate>
         <div class="form-grid">
@@ -34,8 +36,44 @@
           <div class="field"><label for="name">담당자 이름 <span>*</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="60" placeholder="성함" required></div>
           <div class="field"><label for="email">이메일 <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@company.com" required></div>
           <div class="field"><label for="phone">전화번호 <span>*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="010-1234-5678" required></div>
-          <fieldset class="field-wide"><legend>문의·신청 유형 <span class="preview-label">복수 선택 가능</span></legend><div class="choices"><label><input type="checkbox" name="types" value="방문회의">방문회의</label><label><input type="checkbox" name="types" value="방문교육">방문교육</label><label><input type="checkbox" name="types" value="연구 주제 탐색">연구 주제 탐색</label><label><input type="checkbox" name="types" value="기술 자문">기술 자문</label><label><input type="checkbox" name="types" value="방문 세미나">방문 세미나</label><label><input type="checkbox" name="types" value="공동연구">공동연구</label><label><input type="checkbox" name="types" value="기타">기타</label></div></fieldset>
-          <div class="field field-wide"><label for="research"><span id="research-label">문의·신청 내용</span> <span>*</span></label><textarea id="research" name="research" maxlength="3000" required placeholder="논의하거나 배우고 싶은 주제, AI 적용이 필요한 연구·업무 내용을 적어주세요."></textarea></div>
+          <fieldset class="field-wide"><legend>문의·신청 유형 <span>*</span> <span class="preview-label">한 가지만 선택</span></legend><div class="choices request-types"><label><input type="radio" name="types" value="공동연구" required>공동연구</label><label><input type="radio" name="types" value="방문 세미나 요청" required>방문 세미나 요청</label><label><input type="radio" name="types" value="방문 교육 요청" required>방문 교육 요청</label><label><input type="radio" name="types" value="기타" required>기타</label></div></fieldset>
+          <p id="choose-type" class="field-help field-wide">신청 유형을 선택해주세요.</p>
+          <fieldset id="professor-field" class="field-wide" hidden disabled>
+            <legend>희망 교수 <span class="preview-label">선택 · 복수 선택 가능</span></legend>
+            <details class="professor-picker"><summary>교수진 명단에서 선택 <span id="professor-count">0명 선택</span></summary>
+              <div class="professor-options">
+                  <label><input type="checkbox" name="professors" value="이세진"><span><strong>이세진</strong><span class="professor-affiliation">공주대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="유용균"><span><strong>유용균</strong><span class="professor-affiliation">KAERI</span></span></label>
+                  <label><input type="checkbox" name="professors" value="임재혁"><span><strong>임재혁</strong><span class="professor-affiliation">경희대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="최상헌"><span><strong>최상헌</strong><span class="professor-affiliation">경북대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="송재복"><span><strong>송재복</strong><span class="professor-affiliation">고려대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="강남우"><span><strong>강남우</strong><span class="professor-affiliation">KAIST</span></span></label>
+                  <label><input type="checkbox" name="professors" value="김남중"><span><strong>김남중</strong><span class="professor-affiliation">서강대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="민경민"><span><strong>민경민</strong><span class="professor-affiliation">연세대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="손정우"><span><strong>손정우</strong><span class="professor-affiliation">금오공과대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="심주용"><span><strong>심주용</strong><span class="professor-affiliation">숙명여자대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="오현석"><span><strong>오현석</strong><span class="professor-affiliation">GIST</span></span></label>
+                  <label><input type="checkbox" name="professors" value="유승화"><span><strong>유승화</strong><span class="professor-affiliation">KAIST</span></span></label>
+                  <label><input type="checkbox" name="professors" value="이상승"><span><strong>이상승</strong><span class="professor-affiliation">인하대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="이수영"><span><strong>이수영</strong><span class="professor-affiliation">중앙대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="이승철"><span><strong>이승철</strong><span class="professor-affiliation">KAIST</span></span></label>
+                  <label><input type="checkbox" name="professors" value="이덕진"><span><strong>이덕진</strong><span class="professor-affiliation">전북대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="이진우"><span><strong>이진우</strong><span class="professor-affiliation">아주대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="전준구"><span><strong>전준구</strong><span class="professor-affiliation">POSTECH</span></span></label>
+                  <label><input type="checkbox" name="professors" value="하종문"><span><strong>하종문</strong><span class="professor-affiliation">아주대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="현재상"><span><strong>현재상</strong><span class="professor-affiliation">연세대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="김태진"><span><strong>김태진</strong><span class="professor-affiliation">전북대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="정준하"><span><strong>정준하</strong><span class="professor-affiliation">아주대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="박찬희"><span><strong>박찬희</strong><span class="professor-affiliation">서울시립대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="박범수"><span><strong>박범수</strong><span class="professor-affiliation">서울과학기술대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="양선웅"><span><strong>양선웅</strong><span class="professor-affiliation">한양대학교</span></span></label>
+                  <label><input type="checkbox" name="professors" value="김대겸"><span><strong>김대겸</strong><span class="professor-affiliation">고려대학교</span></span></label>
+              </div>
+            </details>
+            <p id="selected-professors" class="field-help selected-professors" aria-live="polite">지정하지 않음</p>
+          </fieldset>
+          <div id="interest-field" class="field field-wide" hidden><label for="interest">관심 분야 <span>*</span></label><input id="interest" name="interest" type="text" maxlength="300" placeholder="예: 설계 최적화, 고장 진단, 생성형 AI" required disabled></div>
+          <div id="research-field" class="field field-wide" hidden><label for="research"><span id="research-label">문의·신청 내용</span> <span>*</span></label><textarea id="research" name="research" maxlength="3000" required disabled placeholder="논의하거나 AI 적용이 필요한 연구·업무 내용을 적어주세요."></textarea></div>
           <fieldset id="visit-details" class="visit-details field-wide" hidden disabled>
             <legend>방문 신청 정보 <span class="preview-label">선택 항목</span></legend>
             <p class="field-help">희망 내용을 적어주시면 담당자가 일정과 진행 방식을 협의합니다.</p>
@@ -46,7 +84,7 @@
               <div class="field field-wide" id="training-details" hidden><label for="trainingDuration">희망 교육 시간</label><input id="trainingDuration" name="trainingDuration" type="text" maxlength="100" placeholder="예: 2시간 특강 / 반나절 실습 / 협의 가능" disabled></div>
             </div>
           </fieldset>
-          <div class="field field-wide"><label for="advice">추가 요청사항 <small>선택</small></label><textarea id="advice" name="advice" maxlength="3000" placeholder="필요한 자문, 실습 여부, 준비 사항 등 추가로 전달할 내용을 적어주세요."></textarea></div>
+          <div id="advice-field" class="field field-wide" hidden><label for="advice">추가 요청사항 <small>선택</small></label><textarea id="advice" name="advice" maxlength="3000" disabled placeholder="필요한 자문, 실습 여부, 준비 사항 등 추가로 전달할 내용을 적어주세요."></textarea></div>
         </div>
         <div class="trap" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required>문의·신청 검토와 회신을 위한 개인정보 이용에 동의합니다. *</label>
@@ -55,7 +93,7 @@
         <div id="status" class="status" role="status" aria-live="polite" tabindex="-1"></div>
       </form>
     </div>
-    <section id="success-view" class="success-panel" hidden tabindex="-1"><div class="success-check" aria-hidden="true">✓</div><h2>문의·신청이 접수되었습니다.</h2><p>내용을 검토한 후 이메일 또는 전화로 연락드리겠습니다. 방문 일정은 담당자와 협의 후 확정됩니다.</p><span id="receipt" class="receipt"></span><button type="button" id="another">다른 문의·신청 작성하기</button></section>
+    <section id="success-view" class="success-panel" hidden tabindex="-1"><div class="success-check" aria-hidden="true">✓</div><h2>문의·신청이 접수되었습니다.</h2><p id="success-message">내용을 검토한 후 이메일 또는 전화로 연락드리겠습니다.</p><span id="receipt" class="receipt"></span><button type="button" id="another">다른 문의·신청 작성하기</button></section>
     <noscript><p>문의 입력을 위해 브라우저의 JavaScript를 활성화해주세요. 현재 정보는 전송되지 않았습니다.</p></noscript>
   </div>
   <script>
@@ -73,17 +111,31 @@
       function id(){if(window.crypto?.randomUUID)return crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
       const visitDetails=document.getElementById('visit-details');
       const trainingDetails=document.getElementById('training-details');
-      function updateRequestFields(){
-        const types=[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value);
-        const training=types.includes('방문교육');
-        const visit=training||types.includes('방문회의')||types.includes('방문 세미나');
-        visitDetails.hidden=!visit;visitDetails.disabled=!visit;
-        trainingDetails.hidden=!training;form.trainingDuration.disabled=!training;
-        document.getElementById('research-label').textContent=training?'방문 목적·희망 교육 주제':visit?'방문 목적·논의 주제':'문의·신청 내용';
-        form.research.placeholder=training?'배우고 싶은 AI 주제, 교육 목표, 희망하는 강의·실습 내용을 적어주세요.':visit?'방문회의·세미나에서 논의할 주제와 필요한 협력 내용을 적어주세요.':'논의하거나 배우고 싶은 주제, AI 적용이 필요한 연구·업무 내용을 적어주세요.';
+      const professorField=document.getElementById('professor-field');
+      function updateProfessorSummary(){
+        const names=[...form.querySelectorAll('[name=professors]:checked')].map(i=>i.value);
+        document.getElementById('professor-count').textContent=names.length+'명 선택';
+        document.getElementById('selected-professors').textContent=names.length?names.join(', '):'지정하지 않음';
         resize();
       }
+      function updateRequestFields(){
+        const type=form.querySelector('[name=types]:checked')?.value||'';
+        const details=!!type&&type!=='기타';
+        const training=type==='방문 교육 요청';
+        const visit=training||type==='방문 세미나 요청';
+        document.getElementById('choose-type').hidden=!!type;
+        professorField.hidden=!details;professorField.disabled=!details;
+        document.getElementById('interest-field').hidden=!details;form.interest.disabled=!details;
+        document.getElementById('advice-field').hidden=!details;form.advice.disabled=!details;
+        document.getElementById('research-field').hidden=!type;form.research.disabled=!type;
+        visitDetails.hidden=!visit;visitDetails.disabled=!visit;
+        trainingDetails.hidden=!training;form.trainingDuration.disabled=!training;
+        document.getElementById('research-label').textContent=type==='기타'?'기타 문의 내용':training?'희망 교육 내용':visit?'희망 세미나 내용':'논의·연구 내용';
+        form.research.placeholder=type==='기타'?'문의하거나 요청하고 싶은 내용을 자유롭게 적어주세요.':training?'배우고 싶은 AI 주제, 교육 목표, 희망하는 강의·실습 내용을 적어주세요.':visit?'세미나에서 듣거나 논의하고 싶은 주제와 연구·업무 내용을 적어주세요.':'논의하거나 AI 적용이 필요한 연구·업무 내용을 적어주세요.';
+        updateProfessorSummary();
+      }
       form.querySelectorAll('[name=types]').forEach(input=>input.addEventListener('change',updateRequestFields));
+      form.querySelectorAll('[name=professors]').forEach(input=>input.addEventListener('change',updateProfessorSummary));
       updateRequestFields();
       form.phone.addEventListener('input',()=>form.phone.setCustomValidity(''));
       form.addEventListener('submit',event=>{
@@ -92,7 +144,7 @@
         const phone=form.phone.value;
         form.phone.setCustomValidity(/^\+?[0-9\s().-]+$/.test(phone)&&phone.replace(/\D/g,'').length>=7&&phone.replace(/\D/g,'').length<=15?'':'전화번호를 확인해주세요.');
         if(!form.reportValidity()){show('필수 항목, 연락처, 개인정보 이용 동의를 확인해주세요.',true);return;}
-        const payload={company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.value,preferredSchedule:visitDetails.disabled?'':form.preferredSchedule.value,visitLocation:visitDetails.disabled?'':form.visitLocation.value,audience:visitDetails.disabled?'':form.audience.value,trainingDuration:form.trainingDuration.disabled?'':form.trainingDuration.value,consent:form.consent.checked,website:form.website.value,startedAt};
+        const payload={company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.disabled?'':form.advice.value,interest:form.interest.disabled?'':form.interest.value,professors:professorField.disabled?[]:[...form.querySelectorAll('[name=professors]:checked')].map(i=>i.value),preferredSchedule:visitDetails.disabled?'':form.preferredSchedule.value,visitLocation:visitDetails.disabled?'':form.visitLocation.value,audience:visitDetails.disabled?'':form.audience.value,trainingDuration:form.trainingDuration.disabled?'':form.trainingDuration.value,consent:form.consent.checked,website:form.website.value,startedAt};
         if(!live){show('입력 내용을 확인했습니다. 미리보기 상태로, 저장이나 메일 발송은 하지 않았습니다.');return;}
         const nextFingerprint=JSON.stringify({...payload,startedAt:0});
         if(nextFingerprint!==fingerprint){submissionId=id();fingerprint=nextFingerprint;}
@@ -101,10 +153,10 @@
         google.script.run.withSuccessHandler(result=>{
           if(thisAttempt!==attempt)return;release();
           if(!result?.ok){show(result?.message||'접수를 완료하지 못했습니다. 잠시 후 다시 시도해주세요.',true);return;}
-          document.getElementById('form-view').hidden=true;document.getElementById('success-view').hidden=false;document.getElementById('receipt').textContent='접수번호 '+result.receipt;document.getElementById('success-view').focus();resize();
+          document.getElementById('form-view').hidden=true;document.getElementById('success-view').hidden=false;document.getElementById('receipt').textContent='접수번호 '+result.receipt;document.getElementById('success-message').textContent='내용을 검토한 후 이메일 또는 전화로 연락드리겠습니다.'+(visitDetails.disabled?'':' 방문 일정은 담당자와 협의 후 확정됩니다.');document.getElementById('success-view').focus();resize();
         }).withFailureHandler(()=>{if(thisAttempt!==attempt)return;release();show('접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 시도해주세요.',true);}).submitInquiry(payload);
       });
-      document.getElementById('another').addEventListener('click',()=>{form.reset();updateRequestFields();show('');submissionId='';fingerprint='';startedAt=Date.now();document.getElementById('success-view').hidden=true;document.getElementById('form-view').hidden=false;form.company.focus();resize();});
+      document.getElementById('another').addEventListener('click',()=>{form.reset();document.querySelector('.professor-picker').open=false;updateRequestFields();show('');submissionId='';fingerprint='';startedAt=Date.now();document.getElementById('success-view').hidden=true;document.getElementById('form-view').hidden=false;form.company.focus();resize();});
       resize();
     })();
   </script>
