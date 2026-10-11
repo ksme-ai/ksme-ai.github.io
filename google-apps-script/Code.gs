@@ -3,13 +3,15 @@
  * Script Properties: NOTIFY_EMAIL, SPREADSHEET_ID (set by setupInquiry).
  * No email addresses, spreadsheet IDs or secrets belong in public frontend files.
  */
-const HEADERS = ['접수일시','접수번호','회사·기관명','담당자 이름','회신 이메일','전화번호','협력 방식','AI 적용 연구·업무 내용','필요한 자문·협력 내용','개인정보 이용 동의','검토 상태','담당자 메모','알림 메일 상태'];
+const LEGACY_HEADERS = ['접수일시','접수번호','회사·기관명','담당자 이름','회신 이메일','전화번호','협력 방식','AI 적용 연구·업무 내용','필요한 자문·협력 내용','개인정보 이용 동의','검토 상태','담당자 메모','알림 메일 상태'];
+const HEADERS = [...LEGACY_HEADERS.slice(0,6),'문의·신청 유형','문의·신청 내용','추가 요청사항',...LEGACY_HEADERS.slice(9),'희망 일정','희망 장소','참석 대상·예상 인원','희망 교육 시간'];
+const VISIT_TYPES = ['방문회의','방문교육','방문 세미나'];
 const TAB_NAME = '산학협력 문의';
-const TYPES = ['연구 주제 탐색','기술 자문','방문 세미나','공동연구','기타'];
+const TYPES = ['방문회의','방문교육','연구 주제 탐색','기술 자문','방문 세미나','공동연구','기타'];
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')
-    .setTitle('산학협력 탐색그룹 문의')
+    .setTitle('산학협력 문의·방문 신청')
     .addMetaTag('viewport','width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
@@ -40,7 +42,7 @@ function setupInquiry() {
       sheet.getRange(1,1,sheet.getMaxRows(),HEADERS.length).createFilter();
       const validation=SpreadsheetApp.newDataValidation().requireValueInList(['신규','검토 중','연락 완료','협의 중','종료'],true).setAllowInvalid(false).build();
       sheet.getRange(2,11,sheet.getMaxRows()-1,1).setDataValidation(validation);
-    } else if(JSON.stringify(sheet.getRange(1,1,1,HEADERS.length).getValues()[0])!==JSON.stringify(HEADERS)) {
+    } else if(!headersMatch_(sheet.getRange(1,1,1,HEADERS.length).getValues()[0])) {
       throw new Error('기존 시트의 열 제목이 예상과 다릅니다. 원본을 보존하고 SPREADSHEET_ID 설정을 확인해주세요.');
     }
     MailApp.getRemainingDailyQuota(); // Request only outgoing mail permission, not Gmail inbox access.
@@ -63,7 +65,7 @@ function submitInquiry(raw) {
   try{
     const book=SpreadsheetApp.openById(spreadsheetId);
     const sheet=book.getSheetByName(TAB_NAME);
-    if(!sheet || JSON.stringify(sheet.getRange(1,1,1,HEADERS.length).getValues()[0])!==JSON.stringify(HEADERS))throw new Error('접수 시트 설정 확인 필요');
+    if(!sheet || !headersMatch_(sheet.getRange(1,1,1,HEADERS.length).getValues()[0]))throw new Error('접수 시트 설정 확인 필요');
     const lastRow=sheet.getLastRow();
     const found=lastRow>1?sheet.getRange(2,2,lastRow-1,1).createTextFinder(data.submissionId).matchEntireCell(true).findNext():null;
     if(found)return {ok:true,receipt:data.submissionId};
@@ -71,23 +73,25 @@ function submitInquiry(raw) {
     const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,data.email.toLowerCase()).map(v=>(v+256).toString(16).slice(-2)).join('');
     const throttle='sender:'+hash;
     if(Number(cache.get(throttle)||0)>=4)return {ok:false,message:'같은 이메일로 문의가 여러 건 접수되었습니다. 잠시 후 다시 이용해주세요.'};
-    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기'];
+    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기',data.preferredSchedule,data.visitLocation,data.audience,data.trainingDuration];
     sheet.appendRow(row.map(safeCell_));
     SpreadsheetApp.flush();stored=true;
     const rowNumber=sheet.getLastRow();
     cache.put(throttle,String(Number(cache.get(throttle)||0)+1),3600);
     try{
       if(MailApp.getRemainingDailyQuota()<1)throw new Error('메일 일일 한도 도달');
+      const visitLabel=data.types.filter(t=>VISIT_TYPES.includes(t)).join('·');
       MailApp.sendEmail({
         to:recipient,
         replyTo:data.email,
         name:'산학협력 탐색그룹',
-        subject:'[산학협력 문의] '+data.company+' · '+data.name,
+        subject:'['+(visitLabel?visitLabel+' 신청':'산학협력 문의')+'] '+data.company+' · '+data.name,
         body:[
-          '새로운 산학협력 문의가 접수되었습니다.',
+          '새로운 문의·신청이 접수되었습니다.',
           '', '회사·기관: '+data.company,'담당자: '+data.name,'회신 이메일: '+data.email,'전화번호: '+data.phone,
-          '협력 방식: '+(data.types.join(', ')||'미선택'),'',
-          '[AI 적용 연구·업무 내용]',data.research,'','[필요한 자문·협력 내용]',data.advice||'미기재','',
+          '문의·신청 유형: '+(data.types.join(', ')||'미선택'),'',
+          '[문의·신청 내용]',data.research,'','[추가 요청사항]',data.advice||'미기재','',
+          ...(visitLabel?['[방문 신청 정보]','희망 일정: '+(data.preferredSchedule||'미기재'),'희망 장소: '+(data.visitLocation||'미기재'),'참석 대상·예상 인원: '+(data.audience||'미기재'),...(data.types.includes('방문교육')?['희망 교육 시간: '+(data.trainingDuration||'미기재')]:[]),'']:[]),
           '접수번호: '+data.submissionId,
           '접수 목록: '+book.getUrl()+'#gid='+sheet.getSheetId()+'&range=A'+rowNumber,
           '이 메일에 답장하면 문의자의 이메일로 연결됩니다.'
@@ -106,6 +110,9 @@ function submitInquiry(raw) {
   }finally{lock.releaseLock();}
 }
 
+// Accept earlier header labels during deployment, without moving existing columns.
+function headersMatch_(values){return values.length===HEADERS.length&&values.every((v,i)=>v===HEADERS[i]||(i<LEGACY_HEADERS.length&&v===LEGACY_HEADERS[i]));}
+
 function validEmail_(value){return typeof value==='string'&&value.length<=254&&/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(value);}
 function safeCell_(value){return typeof value==='string'&&/^[=+\-@\t\r\n]/.test(value)?"'"+value:value;}
 function validate_(raw){
@@ -121,8 +128,16 @@ function validate_(raw){
   if(!validEmail_(data.email))throw new Error('회신 이메일 주소를 확인해주세요.');
   if(!/^\+?[0-9\s().-]+$/.test(data.phone)||data.phone.replace(/\D/g,'').length<7||data.phone.replace(/\D/g,'').length>15)throw new Error('전화번호를 확인해주세요.');
   if(raw.consent!==true)throw new Error('문의 검토와 회신을 위한 개인정보 이용에 동의해주세요.');
-  if(!Array.isArray(raw.types)||raw.types.length>TYPES.length||raw.types.some(t=>!TYPES.includes(t)))throw new Error('협력 방식을 확인해주세요.');
+  if(!Array.isArray(raw.types)||raw.types.length>TYPES.length||raw.types.some(t=>!TYPES.includes(t)))throw new Error('문의·신청 유형을 확인해주세요.');
   data.types=[...new Set(raw.types)];
+  // New optional fields default to blank for forms opened before this update.
+  [['preferredSchedule',200],['visitLocation',200],['audience',200],['trainingDuration',100]].forEach(([key,max])=>{
+    const value=raw[key]===undefined?'':raw[key];
+    if(typeof value!=='string'||value.length>max||/[\u0000-\u001F]/.test(value))throw new Error('방문 신청 정보의 입력 길이와 내용을 확인해주세요.');
+    data[key]=value.trim();
+  });
+  if(!data.types.some(t=>VISIT_TYPES.includes(t)))data.preferredSchedule=data.visitLocation=data.audience='';
+  if(!data.types.includes('방문교육'))data.trainingDuration='';
   if(typeof raw.submissionId!=='string'||!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(raw.submissionId))throw new Error('페이지를 새로 열고 다시 시도해주세요.');
   data.submissionId=raw.submissionId;
   const elapsed=Date.now()-Number(raw.startedAt);

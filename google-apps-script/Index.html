@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <base target="_top">
-  <title>산학협력 문의</title>
+  <title>산학협력 문의·방문 신청</title>
   <style>
     /* Installed KoPubWorld fonts only. Public webfont hosting requires publisher approval. */
     @font-face { font-family:"KoPubWorld Dotum"; font-style:normal; font-weight:400; font-display:swap; src:local("KoPubWorldDotum Medium"), local("KoPubWorldDotumMedium"), local("KoPubWorld돋움체 Medium"); }
@@ -17,13 +17,16 @@
     @media(max-width:600px){.form-shell{padding:25px 20px}.form-grid{grid-template-columns:1fr;gap:19px}.field-wide{grid-column:auto}h2{font-size:21px}.form-intro{font-size:16px}.submit-row{align-items:stretch;flex-direction:column}.submit{width:100%}.privacy{font-size:16px}.choices{gap:9px 14px}.form-shell label{font-size:16px}.submit-row p{font-size:16px}.consent{font-size:16px}input[type=text],input[type=email],input[type=tel],textarea{font-size:16px}.status{font-size:16px;padding:13px}.preview-label{font-size:16px;margin-left:5px}}
     .form-grid{gap:24px 22px}.field{gap:9px}.choices label{min-height:40px}.choices input,.consent input{width:19px;height:19px}.submit-row{flex-wrap:wrap}.submit-row p{flex:1 1 240px}.submit{font-size:18px}.privacy{line-height:1.8}.preview-label{line-height:1.6}.form-shell .consent{line-height:1.75}.success-panel p{font-size:16px}
     @media(max-width:600px){.submit-row p{flex:auto}.form-shell{padding:28px 20px}.choices{gap:8px 18px}.privacy{padding-left:28px}}
+    .visit-details{border:1px solid var(--line);border-radius:4px;padding:20px;background:#f8faf5}.visit-details legend{padding:0 7px;margin:0}.visit-details>.field-help{margin:0 0 18px}.visit-details .form-grid{gap:20px}.field label #research-label{color:var(--ink)}
+    @media(max-width:600px){.visit-details{padding:17px 14px}.form-shell h2{font-size:23px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
   <div class="form-shell">
     <div id="form-view">
-      <h2>산학협력 문의하기 <span id="preview-label" class="preview-label" hidden>미리보기</span></h2>
+      <h2>산학협력 문의·방문 신청 <span id="preview-label" class="preview-label" hidden>미리보기</span></h2>
+      <p class="form-intro">산학협력 문의, 방문회의, 방문교육을 신청하실 수 있습니다.</p>
       <p class="required"><span>*</span> 필수 항목</p>
       <form id="inquiry" novalidate>
         <div class="form-grid">
@@ -31,18 +34,28 @@
           <div class="field"><label for="name">담당자 이름 <span>*</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="60" placeholder="성함" required></div>
           <div class="field"><label for="email">이메일 <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@company.com" required></div>
           <div class="field"><label for="phone">전화번호 <span>*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="010-1234-5678" required></div>
-          <fieldset class="field-wide"><legend>관심 있는 협력 방식 <span class="preview-label">복수 선택 가능</span></legend><div class="choices"><label><input type="checkbox" name="types" value="연구 주제 탐색">연구 주제 탐색</label><label><input type="checkbox" name="types" value="기술 자문">기술 자문</label><label><input type="checkbox" name="types" value="방문 세미나">방문 세미나</label><label><input type="checkbox" name="types" value="공동연구">공동연구</label><label><input type="checkbox" name="types" value="기타">기타</label></div></fieldset>
-          <div class="field field-wide"><label for="research">AI를 적용하고 싶은 연구·업무 내용 <span>*</span></label><textarea id="research" name="research" maxlength="3000" required placeholder="대상 연구·업무, 보유 데이터, 해결하려는 문제를 작성해주세요."></textarea></div>
-          <div class="field field-wide"><label for="advice">필요한 자문·협력 내용 <small>선택</small></label><textarea id="advice" name="advice" maxlength="3000" placeholder="예: AI 적용 가능성 검토, 데이터 분석 방법 자문, 공동연구 제안"></textarea></div>
+          <fieldset class="field-wide"><legend>문의·신청 유형 <span class="preview-label">복수 선택 가능</span></legend><div class="choices"><label><input type="checkbox" name="types" value="방문회의">방문회의</label><label><input type="checkbox" name="types" value="방문교육">방문교육</label><label><input type="checkbox" name="types" value="연구 주제 탐색">연구 주제 탐색</label><label><input type="checkbox" name="types" value="기술 자문">기술 자문</label><label><input type="checkbox" name="types" value="방문 세미나">방문 세미나</label><label><input type="checkbox" name="types" value="공동연구">공동연구</label><label><input type="checkbox" name="types" value="기타">기타</label></div></fieldset>
+          <div class="field field-wide"><label for="research"><span id="research-label">문의·신청 내용</span> <span>*</span></label><textarea id="research" name="research" maxlength="3000" required placeholder="논의하거나 배우고 싶은 주제, AI 적용이 필요한 연구·업무 내용을 적어주세요."></textarea></div>
+          <fieldset id="visit-details" class="visit-details field-wide" hidden disabled>
+            <legend>방문 신청 정보 <span class="preview-label">선택 항목</span></legend>
+            <p class="field-help">희망 내용을 적어주시면 담당자가 일정과 진행 방식을 협의합니다.</p>
+            <div class="form-grid">
+              <div class="field"><label for="preferredSchedule">희망 일정</label><input id="preferredSchedule" name="preferredSchedule" type="text" maxlength="200" placeholder="예: 11월 중 평일 오후 / 협의 가능"></div>
+              <div class="field"><label for="visitLocation">희망 장소</label><input id="visitLocation" name="visitLocation" type="text" maxlength="200" placeholder="예: 성남 본사 회의실 / 온라인"></div>
+              <div class="field field-wide"><label for="audience">참석 대상·예상 인원</label><input id="audience" name="audience" type="text" maxlength="200" placeholder="예: 설계·연구개발 담당자 약 20명, AI 입문 수준"></div>
+              <div class="field field-wide" id="training-details" hidden><label for="trainingDuration">희망 교육 시간</label><input id="trainingDuration" name="trainingDuration" type="text" maxlength="100" placeholder="예: 2시간 특강 / 반나절 실습 / 협의 가능" disabled></div>
+            </div>
+          </fieldset>
+          <div class="field field-wide"><label for="advice">추가 요청사항 <small>선택</small></label><textarea id="advice" name="advice" maxlength="3000" placeholder="필요한 자문, 실습 여부, 준비 사항 등 추가로 전달할 내용을 적어주세요."></textarea></div>
         </div>
         <div class="trap" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
-        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required>문의 검토와 회신을 위한 개인정보 이용에 동의합니다. *</label>
-        <p class="privacy">회사·기관명, 이름, 이메일, 전화번호와 문의 내용은 산학협력 탐색그룹의 문의 검토 및 연락에 사용되며 홈페이지에 공개되지 않습니다.</p>
-        <div class="submit-row"><p id="submit-help">담당자가 이메일 또는 전화로 연락드립니다.</p><button class="submit" type="submit"><span id="submit-label" style="font-size:16px;margin:0">문의 보내기</span><span aria-hidden="true">↗</span></button></div>
+        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required>문의·신청 검토와 회신을 위한 개인정보 이용에 동의합니다. *</label>
+        <p class="privacy">회사·기관명, 이름, 이메일, 전화번호와 작성 내용은 산학협력 탐색그룹의 문의·신청 검토 및 연락에 사용되며 홈페이지에 공개되지 않습니다.</p>
+        <div class="submit-row"><p id="submit-help">담당자가 이메일 또는 전화로 연락드립니다.</p><button class="submit" type="submit"><span id="submit-label" style="font-size:16px;margin:0">문의·신청 보내기</span><span aria-hidden="true">↗</span></button></div>
         <div id="status" class="status" role="status" aria-live="polite" tabindex="-1"></div>
       </form>
     </div>
-    <section id="success-view" class="success-panel" hidden tabindex="-1"><div class="success-check" aria-hidden="true">✓</div><h2>문의가 접수되었습니다.</h2><p>내용을 검토한 후 이메일 또는 전화로 연락드리겠습니다.</p><span id="receipt" class="receipt"></span><button type="button" id="another">다른 문의 작성하기</button></section>
+    <section id="success-view" class="success-panel" hidden tabindex="-1"><div class="success-check" aria-hidden="true">✓</div><h2>문의·신청이 접수되었습니다.</h2><p>내용을 검토한 후 이메일 또는 전화로 연락드리겠습니다. 방문 일정은 담당자와 협의 후 확정됩니다.</p><span id="receipt" class="receipt"></span><button type="button" id="another">다른 문의·신청 작성하기</button></section>
     <noscript><p>문의 입력을 위해 브라우저의 JavaScript를 활성화해주세요. 현재 정보는 전송되지 않았습니다.</p></noscript>
   </div>
   <script>
@@ -56,8 +69,22 @@
       function resize(){const height=Math.max(document.querySelector('.form-shell').scrollHeight,document.querySelector('.form-shell').getBoundingClientRect().height)+4;window.top.postMessage({channel:'ksme-inquiry-height',height},'*');}
       new ResizeObserver(resize).observe(document.querySelector('.form-shell'));
       function show(message,error=false){status.textContent=message;status.classList.toggle('error',error);resize();}
-      function release(){pending=false;submit.disabled=false;clearTimeout(timer);document.getElementById('submit-label').textContent=live?'문의 보내기':'입력 내용 확인';}
+      function release(){pending=false;submit.disabled=false;clearTimeout(timer);document.getElementById('submit-label').textContent=live?'문의·신청 보내기':'입력 내용 확인';}
       function id(){if(window.crypto?.randomUUID)return crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);});}
+      const visitDetails=document.getElementById('visit-details');
+      const trainingDetails=document.getElementById('training-details');
+      function updateRequestFields(){
+        const types=[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value);
+        const training=types.includes('방문교육');
+        const visit=training||types.includes('방문회의')||types.includes('방문 세미나');
+        visitDetails.hidden=!visit;visitDetails.disabled=!visit;
+        trainingDetails.hidden=!training;form.trainingDuration.disabled=!training;
+        document.getElementById('research-label').textContent=training?'방문 목적·희망 교육 주제':visit?'방문 목적·논의 주제':'문의·신청 내용';
+        form.research.placeholder=training?'배우고 싶은 AI 주제, 교육 목표, 희망하는 강의·실습 내용을 적어주세요.':visit?'방문회의·세미나에서 논의할 주제와 필요한 협력 내용을 적어주세요.':'논의하거나 배우고 싶은 주제, AI 적용이 필요한 연구·업무 내용을 적어주세요.';
+        resize();
+      }
+      form.querySelectorAll('[name=types]').forEach(input=>input.addEventListener('change',updateRequestFields));
+      updateRequestFields();
       form.phone.addEventListener('input',()=>form.phone.setCustomValidity(''));
       form.addEventListener('submit',event=>{
         event.preventDefault();if(pending)return;
@@ -65,11 +92,11 @@
         const phone=form.phone.value;
         form.phone.setCustomValidity(/^\+?[0-9\s().-]+$/.test(phone)&&phone.replace(/\D/g,'').length>=7&&phone.replace(/\D/g,'').length<=15?'':'전화번호를 확인해주세요.');
         if(!form.reportValidity()){show('필수 항목, 연락처, 개인정보 이용 동의를 확인해주세요.',true);return;}
-        const payload={company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.value,consent:form.consent.checked,website:form.website.value,startedAt};
+        const payload={company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.value,preferredSchedule:visitDetails.disabled?'':form.preferredSchedule.value,visitLocation:visitDetails.disabled?'':form.visitLocation.value,audience:visitDetails.disabled?'':form.audience.value,trainingDuration:form.trainingDuration.disabled?'':form.trainingDuration.value,consent:form.consent.checked,website:form.website.value,startedAt};
         if(!live){show('입력 내용을 확인했습니다. 미리보기 상태로, 저장이나 메일 발송은 하지 않았습니다.');return;}
         const nextFingerprint=JSON.stringify({...payload,startedAt:0});
         if(nextFingerprint!==fingerprint){submissionId=id();fingerprint=nextFingerprint;}
-        payload.submissionId=submissionId;const thisAttempt=++attempt;pending=true;submit.disabled=true;document.getElementById('submit-label').textContent='접수 중…';show('문의 내용을 접수하고 있습니다.');
+        payload.submissionId=submissionId;const thisAttempt=++attempt;pending=true;submit.disabled=true;document.getElementById('submit-label').textContent='접수 중…';show('문의·신청 내용을 접수하고 있습니다.');
         timer=setTimeout(()=>{if(thisAttempt!==attempt)return;release();show('접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 시도해주세요.',true);},45000);
         google.script.run.withSuccessHandler(result=>{
           if(thisAttempt!==attempt)return;release();
@@ -77,7 +104,7 @@
           document.getElementById('form-view').hidden=true;document.getElementById('success-view').hidden=false;document.getElementById('receipt').textContent='접수번호 '+result.receipt;document.getElementById('success-view').focus();resize();
         }).withFailureHandler(()=>{if(thisAttempt!==attempt)return;release();show('접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 시도해주세요.',true);}).submitInquiry(payload);
       });
-      document.getElementById('another').addEventListener('click',()=>{form.reset();show('');submissionId='';fingerprint='';startedAt=Date.now();document.getElementById('success-view').hidden=true;document.getElementById('form-view').hidden=false;form.company.focus();resize();});
+      document.getElementById('another').addEventListener('click',()=>{form.reset();updateRequestFields();show('');submissionId='';fingerprint='';startedAt=Date.now();document.getElementById('success-view').hidden=true;document.getElementById('form-view').hidden=false;form.company.focus();resize();});
       resize();
     })();
   </script>

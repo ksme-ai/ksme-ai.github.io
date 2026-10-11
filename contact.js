@@ -21,7 +21,7 @@
       frame.hidden = true;
       openHelp.hidden = false;
       openPanel.classList.add("standalone");
-      openLink.textContent = "산학협력 문의 작성 ↗";
+      openLink.textContent = "문의·방문 신청 작성 ↗";
     }, 12000);
   }
   if (endpoint && !connected) {
@@ -37,8 +37,8 @@
       frame.hidden = false;
       openHelp.hidden = true;
       openPanel.classList.remove("standalone");
-      openLink.textContent = "문의 양식 새 창에서 열기 ↗";
-      frame.style.height = `${Math.min(2200, Math.max(600, Math.ceil(height)))}px`;
+      openLink.textContent = "문의·신청 양식 새 창에서 열기 ↗";
+      frame.style.height = `${Math.min(3200, Math.max(600, Math.ceil(height)))}px`;
     }
   });
 })();
