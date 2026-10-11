@@ -18,7 +18,7 @@
 
 ## GitHub Pages에 게시
 
-이 디렉터리의 사이트 파일을 GitHub 저장소 `main` 브랜치에 올린 뒤 Settings → Pages → Source를 GitHub Actions로 지정합니다. 제공된 워크플로는 `index.html`, `styles.css`, `app.js`, `contact-config.js`, `contact.js`, `contact-form.html`, `.nojekyll`, `assets/`만 사이트로 게시합니다. 사용자 또는 조직 페이지와 저장소별 하위 경로 모두 상대경로로 동작합니다. 공개 주소는 [https://sunwoong-yang.github.io/ksme-ai-industry/](https://sunwoong-yang.github.io/ksme-ai-industry/)이며, 소스 저장소는 [https://github.com/sunwoong-yang/ksme-ai-industry](https://github.com/sunwoong-yang/ksme-ai-industry)입니다. `main` 브랜치에 푸시하면 GitHub Actions에서 사이트를 배포합니다.
+이 디렉터리의 사이트 파일을 GitHub 저장소 `main` 브랜치에 올린 뒤 Settings → Pages → Source를 GitHub Actions로 지정합니다. 제공된 워크플로는 `index.html`, `styles.css`, `app.js`, `contact-config.js`, `contact.js`, `contact-form.html`, `.nojekyll`, `assets/`만 사이트로 게시합니다. 사용자 또는 조직 페이지와 저장소별 하위 경로 모두 상대경로로 동작합니다. 공개 주소는 [https://ksme-ai.github.io/](https://ksme-ai.github.io/)이며, 소스 저장소는 [https://github.com/ksme-ai/ksme-ai.github.io](https://github.com/ksme-ai/ksme-ai.github.io)입니다. `main` 브랜치에 푸시하면 GitHub Actions에서 사이트를 배포합니다.
 
 원본 발표자료·회의록 폴더와 ZIP은 `.gitignore`로 제외했습니다. 원본 자료는 홈페이지의 다운로드 항목으로 포함하지 않았습니다.
 
@@ -30,7 +30,7 @@
 
 입력 내용은 기존 비공개 Google 스프레드시트에 누적되고, 지정한 담당자에게 메일로 알립니다. 방문 정보는 N:Q, 희망 교수는 R, 관심 분야는 S에 저장합니다. 기존 열의 위치와 접수 기록을 유지합니다. 메일 제목은 선택한 신청 유형이며, 교수 선택은 해당 교수에게 자동으로 메일을 보내지 않습니다. 실제 연결 방법은 [Google 연결 안내](google-apps-script/SETUP.md)에 정리돼 있습니다.
 
-2026년 10월 4일 Google 인증과 웹 앱 배포를 완료했습니다. 테스트 문의 한 건으로 접수번호 발급, 전화번호를 포함한 시트 저장, 알림 메일의 받은편지함 도착을 확인했습니다. 테스트 행은 `[연결 테스트]`로 구분했습니다. 홈페이지 본체는 [GitHub Pages](https://sunwoong-yang.github.io/ksme-ai-industry/)로 배포합니다.
+2026년 10월 4일 Google 인증과 웹 앱 배포를 완료했습니다. 테스트 문의 한 건으로 접수번호 발급, 전화번호를 포함한 시트 저장, 알림 메일의 받은편지함 도착을 확인했습니다. 테스트 행은 `[연결 테스트]`로 구분했습니다. 홈페이지 본체는 [GitHub Pages](https://ksme-ai.github.io/)로 배포합니다.
 
 2026년 10월 11일 기존 웹 앱을 버전 3으로 업데이트했습니다. 방문회의·방문교육을 함께 선택한 테스트 신청으로 접수 성공, 새 방문 정보 네 항목의 저장, 담당자 받은편지함에 상세 내용이 포함된 알림 도착을 확인했습니다. 기존 접수 기록은 유지했습니다.
 
