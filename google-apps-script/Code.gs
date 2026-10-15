@@ -4,16 +4,16 @@
  * No email addresses, spreadsheet IDs or secrets belong in public frontend files.
  */
 const LEGACY_HEADERS = ['접수일시','접수번호','회사·기관명','담당자 이름','회신 이메일','전화번호','협력 방식','AI 적용 연구·업무 내용','필요한 자문·협력 내용','개인정보 이용 동의','검토 상태','담당자 메모','알림 메일 상태'];
-const HEADERS = [...LEGACY_HEADERS.slice(0,6),'문의·신청 유형','문의·신청 내용','추가 요청사항',...LEGACY_HEADERS.slice(9),'희망 일정','희망 장소','참석 대상·예상 인원','희망 교육 시간','희망 교수','관심 분야'];
-const VISIT_TYPES = ['방문 세미나 요청','방문 교육 요청'];
+const HEADERS = [...LEGACY_HEADERS.slice(0,3),'신청자 이름',...LEGACY_HEADERS.slice(4,6),'문의·신청 유형','문의·신청 내용','추가 요청사항',...LEGACY_HEADERS.slice(9),'희망 일정','희망 장소','참석 대상·예상 인원','희망 교육 시간','희망 교수','관심 분야','소속 부서','직위','방문지 주소'];
+const VISIT_TYPES = ['방문 회의 요청','방문 교육 요청'];
 const TAB_NAME = '산학협력 문의';
-const TYPES = ["공동연구", "방문 세미나 요청", "방문 교육 요청", "기타"];
+const TYPES = ["공동연구", "방문 회의 요청", "방문 교육 요청", "기타"];
 // Keep aligned with the 26 members displayed in index.html.
 const PROFESSORS = ["이세진", "유용균", "임재혁", "최상헌", "송재복", "강남우", "김남중", "민경민", "손정우", "심주용", "오현석", "유승화", "이상승", "이수영", "이승철", "이덕진", "이진우", "전준구", "하종문", "현재상", "김태진", "정준하", "박찬희", "박범수", "양선웅", "김대겸"];
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')
-    .setTitle('산학협력 문의·방문 신청')
+    .setTitle('산학협력 방문회의 및 방문 교육 신청')
     .addMetaTag('viewport','width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
@@ -75,7 +75,7 @@ function submitInquiry(raw) {
     const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,data.email.toLowerCase()).map(v=>(v+256).toString(16).slice(-2)).join('');
     const throttle='sender:'+hash;
     if(Number(cache.get(throttle)||0)>=4)return {ok:false,message:'같은 이메일로 문의가 여러 건 접수되었습니다. 잠시 후 다시 이용해주세요.'};
-    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기',data.preferredSchedule,data.visitLocation,data.audience,data.trainingDuration,data.professors.join(', '),data.interest];
+    const row=[new Date(),data.submissionId,data.company,data.name,data.email,data.phone,data.types.join(', '),data.research,data.advice,'동의','신규','','대기',data.preferredSchedule,data.visitLocation,data.audience,data.trainingDuration,data.professors.join(', '),data.interest,data.department,data.position,data.visitAddress];
     sheet.appendRow(row.map(safeCell_));
     SpreadsheetApp.flush();stored=true;
     const rowNumber=sheet.getLastRow();
@@ -90,12 +90,12 @@ function submitInquiry(raw) {
         subject:'['+data.types[0]+'] '+data.company+' · '+data.name,
         body:[
           '새로운 문의·신청이 접수되었습니다.',
-          '', '회사·기관: '+data.company,'담당자: '+data.name,'회신 이메일: '+data.email,'전화번호: '+data.phone,
+          '', '회사·기관: '+data.company,'신청자: '+data.name,'소속 부서: '+(data.department||'미기재'),'직위: '+(data.position||'미기재'),'회신 이메일: '+data.email,'전화번호: '+data.phone,
           '문의·신청 유형: '+(data.types.join(', ')||'미선택'),'',
           ...(data.types[0]!=='기타'?['희망 교수: '+(data.professors.join(', ')||'미지정'),'관심 분야: '+data.interest,'']:[]),
           data.types[0]==='기타'?'[기타 문의 내용]':'[문의·신청 내용]',data.research,'',
           ...(data.types[0]!=='기타'?['[추가 요청사항]',data.advice||'미기재','']:[]),
-          ...(visitLabel?['[방문 신청 정보]','희망 일정: '+(data.preferredSchedule||'미기재'),'희망 장소: '+(data.visitLocation||'미기재'),'참석 대상·예상 인원: '+(data.audience||'미기재'),...(data.types.includes('방문 교육 요청')?['희망 교육 시간: '+(data.trainingDuration||'미기재')]:[]),'']:[]),
+          ...(visitLabel?['[방문 신청 정보]','희망 일정: '+(data.preferredSchedule||'미기재'),'희망 장소: '+(data.visitLocation||'미기재'),'방문지 주소: '+(data.visitAddress||'미기재'),'참석 대상·예상 인원: '+(data.audience||'미기재'),...(data.types.includes('방문 교육 요청')?['희망 교육 시간: '+(data.trainingDuration||'미기재')]:[]),'']:[]),
           '접수번호: '+data.submissionId,
           '접수 목록: '+book.getUrl()+'#gid='+sheet.getSheetId()+'&range=A'+rowNumber,
           '이 메일에 답장하면 문의자의 이메일로 연결됩니다.'
@@ -144,8 +144,13 @@ function validate_(raw){
     if(!Array.isArray(professors)||professors.length>PROFESSORS.length||professors.some(name=>!PROFESSORS.includes(name)))throw new Error('교수진 명단에서 희망 교수를 선택해주세요.');
     data.professors=[...new Set(professors)];
   }
+  [['department',120],['position',80]].forEach(([key,max])=>{
+    const value=raw[key]===undefined?'':raw[key];
+    if(typeof value!=='string'||value.length>max||/[\u0000-\u001F]/.test(value))throw new Error('소속 부서와 직위는 입력 길이를 확인하고 한 줄로 적어주세요.');
+    data[key]=value.trim();
+  });
   // Inactive fields are ignored so values from a previous selection cannot leak into a request.
-  [['preferredSchedule',200],['visitLocation',200],['audience',200],['trainingDuration',100]].forEach(([key,max])=>{
+  [['preferredSchedule',200],['visitAddress',200],['visitLocation',200],['audience',200],['trainingDuration',100]].forEach(([key,max])=>{
     const active=key==='trainingDuration'?data.types[0]==='방문 교육 요청':VISIT_TYPES.includes(data.types[0]);
     const value=!active||raw[key]===undefined?'':raw[key];
     if(typeof value!=='string'||value.length>max||/[\u0000-\u001F]/.test(value))throw new Error('방문 신청 정보의 입력 길이와 내용을 확인해주세요.');

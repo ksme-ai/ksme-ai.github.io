@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <base target="_top">
-  <title>산학협력 문의·방문 신청</title>
+  <title>산학협력 방문회의 및 방문 교육 신청</title>
   <style>
     /* Installed KoPubWorld fonts only. Public webfont hosting requires publisher approval. */
     @font-face { font-family:"KoPubWorld Dotum"; font-style:normal; font-weight:400; font-display:swap; src:local("KoPubWorldDotum Medium"), local("KoPubWorldDotumMedium"), local("KoPubWorld돋움체 Medium"); }
@@ -27,16 +27,18 @@
 <body>
   <div class="form-shell">
     <div id="form-view">
-      <h2>산학협력 문의·방문 신청 <span id="preview-label" class="preview-label" hidden>미리보기</span></h2>
-      <p class="form-intro">공동연구, 방문 세미나, 방문 교육에 관한 문의를 받습니다.</p>
+      <h2>산학협력 방문회의 및 방문 교육 신청 <span id="preview-label" class="preview-label" hidden>미리보기</span></h2>
+      <p class="form-intro">공동연구, 방문 회의, 방문 교육에 관한 문의를 받습니다.</p>
       <p class="required"><span>*</span> 필수 항목</p>
       <form id="inquiry" novalidate>
         <div class="form-grid">
           <div class="field"><label for="company">회사·기관명 <span>*</span></label><input id="company" name="company" type="text" autocomplete="organization" maxlength="120" placeholder="회사 또는 기관 이름" required></div>
-          <div class="field"><label for="name">담당자 이름 <span>*</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="60" placeholder="성함" required></div>
+          <div class="field"><label for="name">신청자 이름 <span>*</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="60" placeholder="성함" required></div>
+          <div class="field"><label for="department">소속 부서 <small>선택</small></label><input id="department" name="department" type="text" maxlength="120" placeholder="예: 기술연구소 설계팀"></div>
+          <div class="field"><label for="position">직위 <small>선택</small></label><input id="position" name="position" type="text" autocomplete="organization-title" maxlength="80" placeholder="예: 책임연구원"></div>
           <div class="field"><label for="email">이메일 <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="name@company.com" required></div>
           <div class="field"><label for="phone">전화번호 <span>*</span></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="010-1234-5678" required></div>
-          <fieldset class="field-wide"><legend>문의·신청 유형 <span>*</span> <span class="preview-label">한 가지만 선택</span></legend><div class="choices request-types"><label><input type="radio" name="types" value="공동연구" required>공동연구</label><label><input type="radio" name="types" value="방문 세미나 요청" required>방문 세미나 요청</label><label><input type="radio" name="types" value="방문 교육 요청" required>방문 교육 요청</label><label><input type="radio" name="types" value="기타" required>기타</label></div></fieldset>
+          <fieldset class="field-wide"><legend>문의·신청 유형 <span>*</span> <span class="preview-label">한 가지만 선택</span></legend><div class="choices request-types"><label><input type="radio" name="types" value="공동연구" required>공동연구</label><label><input type="radio" name="types" value="방문 회의 요청" required>방문 회의 요청</label><label><input type="radio" name="types" value="방문 교육 요청" required>방문 교육 요청</label><label><input type="radio" name="types" value="기타" required>기타</label></div></fieldset>
           <p id="choose-type" class="field-help field-wide">신청 유형을 선택해주세요.</p>
           <fieldset id="professor-field" class="field-wide" hidden disabled>
             <legend>희망 교수 <span class="preview-label">선택 · 복수 선택 가능</span></legend>
@@ -80,6 +82,7 @@
             <div class="form-grid">
               <div class="field"><label for="preferredSchedule">희망 일정</label><input id="preferredSchedule" name="preferredSchedule" type="text" maxlength="200" placeholder="예: 11월 중 평일 오후 / 협의 가능"></div>
               <div class="field"><label for="visitLocation">희망 장소</label><input id="visitLocation" name="visitLocation" type="text" maxlength="200" placeholder="예: 성남 본사 회의실 / 온라인"></div>
+              <div class="field field-wide"><label for="visitAddress">방문지 주소 <small>선택</small></label><input id="visitAddress" name="visitAddress" type="text" maxlength="200" placeholder="예: 경기도 성남시 분당구"><p class="field-help">시·도와 시·군·구까지만 적어주세요.</p></div>
               <div class="field field-wide"><label for="audience">참석 대상·예상 인원</label><input id="audience" name="audience" type="text" maxlength="200" placeholder="예: 설계·연구개발 담당자 약 20명, AI 입문 수준"></div>
               <div class="field field-wide" id="training-details" hidden><label for="trainingDuration">희망 교육 시간</label><input id="trainingDuration" name="trainingDuration" type="text" maxlength="100" placeholder="예: 2시간 특강 / 반나절 실습 / 협의 가능" disabled></div>
             </div>
@@ -88,7 +91,7 @@
         </div>
         <div class="trap" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
         <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required>문의·신청 검토와 회신을 위한 개인정보 이용에 동의합니다. *</label>
-        <p class="privacy">회사·기관명, 이름, 이메일, 전화번호와 작성 내용은 산학협력 탐색그룹의 문의·신청 검토 및 연락에 사용되며 홈페이지에 공개되지 않습니다.</p>
+        <p class="privacy">회사·기관명, 신청자 이름, 소속 부서, 직위, 이메일, 전화번호, 방문지 주소와 작성 내용은 산학협력 탐색그룹의 문의·신청 검토 및 연락에 사용되며 홈페이지에 공개되지 않습니다.</p>
         <div class="submit-row"><p id="submit-help">담당자가 이메일 또는 전화로 연락드립니다.</p><button class="submit" type="submit"><span id="submit-label" style="font-size:16px;margin:0">문의·신청 보내기</span><span aria-hidden="true">↗</span></button></div>
         <div id="status" class="status" role="status" aria-live="polite" tabindex="-1"></div>
       </form>
@@ -122,7 +125,7 @@
         const type=form.querySelector('[name=types]:checked')?.value||'';
         const details=!!type&&type!=='기타';
         const training=type==='방문 교육 요청';
-        const visit=training||type==='방문 세미나 요청';
+        const visit=training||type==='방문 회의 요청';
         document.getElementById('choose-type').hidden=!!type;
         professorField.hidden=!details;professorField.disabled=!details;
         document.getElementById('interest-field').hidden=!details;form.interest.disabled=!details;
@@ -130,8 +133,8 @@
         document.getElementById('research-field').hidden=!type;form.research.disabled=!type;
         visitDetails.hidden=!visit;visitDetails.disabled=!visit;
         trainingDetails.hidden=!training;form.trainingDuration.disabled=!training;
-        document.getElementById('research-label').textContent=type==='기타'?'기타 문의 내용':training?'희망 교육 내용':visit?'희망 세미나 내용':'논의·연구 내용';
-        form.research.placeholder=type==='기타'?'문의하거나 요청하고 싶은 내용을 자유롭게 적어주세요.':training?'배우고 싶은 AI 주제, 교육 목표, 희망하는 강의·실습 내용을 적어주세요.':visit?'세미나에서 듣거나 논의하고 싶은 주제와 연구·업무 내용을 적어주세요.':'논의하거나 AI 적용이 필요한 연구·업무 내용을 적어주세요.';
+        document.getElementById('research-label').textContent=type==='기타'?'기타 문의 내용':training?'희망 교육 내용':visit?'희망 회의 내용':'논의·연구 내용';
+        form.research.placeholder=type==='기타'?'문의하거나 요청하고 싶은 내용을 자유롭게 적어주세요.':training?'배우고 싶은 AI 주제, 교육 목표, 희망하는 강의·실습 내용을 적어주세요.':visit?'방문 회의에서 논의하고 싶은 주제와 연구·업무 내용을 적어주세요.':'논의하거나 AI 적용이 필요한 연구·업무 내용을 적어주세요.';
         updateProfessorSummary();
       }
       form.querySelectorAll('[name=types]').forEach(input=>input.addEventListener('change',updateRequestFields));
@@ -144,7 +147,7 @@
         const phone=form.phone.value;
         form.phone.setCustomValidity(/^\+?[0-9\s().-]+$/.test(phone)&&phone.replace(/\D/g,'').length>=7&&phone.replace(/\D/g,'').length<=15?'':'전화번호를 확인해주세요.');
         if(!form.reportValidity()){show('필수 항목, 연락처, 개인정보 이용 동의를 확인해주세요.',true);return;}
-        const payload={company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.disabled?'':form.advice.value,interest:form.interest.disabled?'':form.interest.value,professors:professorField.disabled?[]:[...form.querySelectorAll('[name=professors]:checked')].map(i=>i.value),preferredSchedule:visitDetails.disabled?'':form.preferredSchedule.value,visitLocation:visitDetails.disabled?'':form.visitLocation.value,audience:visitDetails.disabled?'':form.audience.value,trainingDuration:form.trainingDuration.disabled?'':form.trainingDuration.value,consent:form.consent.checked,website:form.website.value,startedAt};
+        const payload={department:form.department.value,position:form.position.value,visitAddress:visitDetails.disabled?'':form.visitAddress.value,company:form.company.value,name:form.elements.namedItem('name').value,email:form.email.value,phone:form.phone.value,types:[...form.querySelectorAll('[name=types]:checked')].map(i=>i.value),research:form.research.value,advice:form.advice.disabled?'':form.advice.value,interest:form.interest.disabled?'':form.interest.value,professors:professorField.disabled?[]:[...form.querySelectorAll('[name=professors]:checked')].map(i=>i.value),preferredSchedule:visitDetails.disabled?'':form.preferredSchedule.value,visitLocation:visitDetails.disabled?'':form.visitLocation.value,audience:visitDetails.disabled?'':form.audience.value,trainingDuration:form.trainingDuration.disabled?'':form.trainingDuration.value,consent:form.consent.checked,website:form.website.value,startedAt};
         if(!live){show('입력 내용을 확인했습니다. 미리보기 상태로, 저장이나 메일 발송은 하지 않았습니다.');return;}
         const nextFingerprint=JSON.stringify({...payload,startedAt:0});
         if(nextFingerprint!==fingerprint){submissionId=id();fingerprint=nextFingerprint;}
