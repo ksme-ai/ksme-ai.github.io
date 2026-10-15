@@ -84,8 +84,8 @@ document.querySelectorAll(".visit-gallery .photo-open").forEach(trigger => {
     const parent = trigger.getBoundingClientRect();
     const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
     const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-    const zoom = 2.5;
-    const size = Math.min(220, rect.width * .6, rect.height * .8);
+    const zoom = 1.5;
+    const size = Math.min(320, rect.width * .8, rect.height * .9);
     const fit = getComputedStyle(img).objectFit;
     const scale = (fit === "contain" ? Math.min : Math.max)(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
     const width = img.naturalWidth * scale;
