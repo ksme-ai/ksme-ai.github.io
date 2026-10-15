@@ -1968,3 +1968,20 @@ body.modal-open {
 
 /* Consistent top-page section shortcuts. */
 .hero-actions{gap:12px}.hero-actions .button{justify-content:space-between;gap:14px;min-height:56px;min-width:220px;padding:14px 20px;border-radius:6px;text-decoration:none;font-size:18px}.hero-actions .button:focus-visible{outline:3px solid var(--green);outline-offset:4px}#contact,#journey{scroll-margin-top:110px}@media(max-width:580px){.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .button{width:100%;min-width:0}#contact,#journey{scroll-margin-top:145px}}
+
+/* Main inquiry action and pointer-controlled square photo magnifier. */
+.hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;max-width:520px;gap:12px}
+.hero-actions .button{min-width:0;width:100%;gap:10px;padding-inline:18px}
+.hero-actions .button-contact{grid-column:1/-1;justify-content:center;position:relative;min-height:66px;font-size:20px;background:#b64c25;box-shadow:0 5px 14px rgb(133 57 25 / 17%);overflow:hidden}
+.hero-actions .button-contact span{position:absolute;right:22px;transition:transform .2s}
+.hero-actions .button-contact:hover{background:#963b1b;transform:translateY(-3px);box-shadow:0 8px 20px rgb(133 57 25 / 25%)}
+.hero-actions .button-contact:hover span{transform:translateY(3px)}
+.hero-actions .button-contact:active{transform:translateY(0)}
+.hero-actions .button-contact:focus-visible{outline-color:#b64c25}
+.visit-gallery .photo-open:hover img{transform:none}
+.photo-magnifier{position:absolute;pointer-events:none;z-index:3;border:3px solid #fff;border-radius:5px;background-repeat:no-repeat;box-shadow:0 4px 20px rgb(0 0 0 / 30%);opacity:0;visibility:hidden}
+.photo-magnifier.is-visible{opacity:1;visibility:visible}
+@media(hover:hover) and (pointer:fine){.visit-gallery .photo-open{cursor:crosshair}}
+@media(max-width:580px){.hero-actions .button{font-size:16px;padding-inline:12px;gap:4px}.hero-actions .button-contact{font-size:19px}}
+@media(max-width:359px){.hero-actions{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.hero-actions .button,.hero-actions .button-contact span{transition:none}.hero-actions .button-contact:hover,.hero-actions .button-contact:hover span{transform:none}}

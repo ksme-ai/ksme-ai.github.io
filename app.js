@@ -69,3 +69,40 @@ if ("IntersectionObserver" in window) {
   }, {rootMargin:"-15% 0px -55% 0px", threshold:0});
   document.querySelectorAll(".visit").forEach(visit => observer.observe(visit));
 }
+
+// Magnify only the currently displayed image, including its existing privacy blur.
+document.querySelectorAll(".visit-gallery .photo-open").forEach(trigger => {
+  const img = trigger.querySelector("img");
+  const lens = document.createElement("span");
+  lens.className = "photo-magnifier";
+  lens.setAttribute("aria-hidden", "true");
+  trigger.append(lens);
+  const hide = () => lens.classList.remove("is-visible");
+  trigger.addEventListener("pointermove", event => {
+    if (event.pointerType !== "mouse" || !window.matchMedia("(hover:hover) and (pointer:fine)").matches || !img.complete || !img.naturalWidth) return hide();
+    const rect = img.getBoundingClientRect();
+    const parent = trigger.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
+    const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
+    const zoom = 2.5;
+    const size = Math.min(220, rect.width * .6, rect.height * .8);
+    const fit = getComputedStyle(img).objectFit;
+    const scale = (fit === "contain" ? Math.min : Math.max)(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
+    const width = img.naturalWidth * scale;
+    const height = img.naturalHeight * scale;
+    const offsetX = (rect.width - width) / 2;
+    const offsetY = (rect.height - height) / 2;
+    lens.style.width = lens.style.height = `${size}px`;
+    lens.style.left = `${rect.left - parent.left + Math.max(0, Math.min(rect.width - size, x - size / 2))}px`;
+    lens.style.top = `${rect.top - parent.top + Math.max(0, Math.min(rect.height - size, y - size / 2))}px`;
+    lens.style.backgroundImage = `url("${img.currentSrc || img.src}")`;
+    lens.style.backgroundSize = `${width * zoom}px ${height * zoom}px`;
+    lens.style.backgroundPosition = `${size / 2 - (x - offsetX) * zoom}px ${size / 2 - (y - offsetY) * zoom}px`;
+    lens.classList.add("is-visible");
+  });
+  trigger.addEventListener("pointerleave", hide);
+  trigger.addEventListener("click", hide);
+  img.addEventListener("load", hide);
+  window.addEventListener("scroll", hide, {passive:true});
+  window.addEventListener("resize", hide);
+});
