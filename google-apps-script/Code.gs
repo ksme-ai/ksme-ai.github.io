@@ -8,8 +8,8 @@ const HEADERS = [...LEGACY_HEADERS.slice(0,3),'신청자 이름',...LEGACY_HEADE
 const VISIT_TYPES = ['방문 회의 요청','방문 교육 요청'];
 const TAB_NAME = '산학협력 문의';
 const TYPES = ["공동연구", "방문 회의 요청", "방문 교육 요청", "기타"];
-// Keep aligned with the 26 members displayed in index.html.
-const PROFESSORS = ["이세진", "유용균", "임재혁", "최상헌", "송재복", "강남우", "김남중", "민경민", "손정우", "심주용", "오현석", "유승화", "이상승", "이수영", "이승철", "이덕진", "이진우", "전준구", "하종문", "현재상", "김태진", "정준하", "박찬희", "박범수", "양선웅", "김대겸"];
+// Keep aligned with the 25 members displayed in index.html.
+const PROFESSORS = ["이세진", "유용균", "임재혁", "최상헌", "송재복", "강남우", "김남중", "민경민", "손정우", "심주용", "오현석", "유승화", "이상승", "이수영", "이승철", "이덕진", "이진우", "전준구", "하종문", "김태진", "정준하", "박찬희", "박범수", "양선웅", "김대겸"];
 
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')

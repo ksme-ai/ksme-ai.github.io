@@ -2011,3 +2011,5 @@ body.modal-open .floating-contact{visibility:hidden}
 .floating-contact:hover{transform:translateY(calc(-50% + var(--follow-offset,0px)))}
 @media(max-width:580px){.floating-contact{top:50%;bottom:auto;min-height:96px}}
 @media(prefers-reduced-motion:reduce){.floating-contact,.floating-contact:hover{transform:translateY(-50%);transition:none}}
+
+.site-footer .container{flex-wrap:wrap;gap:22px}.site-footer .site-manager{font-size:16px;line-height:1.8}.site-footer .site-manager a{font-size:16px;text-decoration:underline;text-underline-offset:4px}
