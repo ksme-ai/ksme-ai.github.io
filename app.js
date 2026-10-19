@@ -106,3 +106,32 @@ document.querySelectorAll(".visit-gallery .photo-open").forEach(trigger => {
   window.addEventListener("scroll", hide, {passive:true});
   window.addEventListener("resize", hide);
 });
+
+// Briefly trail the page motion, then settle back at the viewport midpoint.
+(() => {
+  const button = document.querySelector('.floating-contact');
+  if (!button) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let lastScroll = window.scrollY, offset = 0, frame = 0, lastTime = 0;
+  const paint = () => button.style.setProperty('--follow-offset', `${offset.toFixed(2)}px`);
+  const settle = time => {
+    const elapsed = Math.min(64, time - (lastTime || time));
+    lastTime = time;
+    offset *= Math.exp(-elapsed / 180);
+    if (Math.abs(offset) < .2) { offset = 0; frame = 0; lastTime = 0; paint(); return; }
+    paint();
+    frame = requestAnimationFrame(settle);
+  };
+  const reset = () => { cancelAnimationFrame(frame); frame = 0; offset = 0; lastTime = 0; lastScroll = window.scrollY; paint(); };
+  window.addEventListener('scroll', () => {
+    const delta = window.scrollY - lastScroll;
+    lastScroll = window.scrollY;
+    if (reduced.matches) return;
+    const limit = Math.min(85, window.innerHeight * .12);
+    offset = Math.max(-limit, Math.min(limit, offset - delta * .32));
+    paint();
+    if (!frame) frame = requestAnimationFrame(settle);
+  }, {passive:true});
+  window.addEventListener('resize', reset);
+  reduced.addEventListener('change', reset);
+})();

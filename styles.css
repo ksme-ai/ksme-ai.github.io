@@ -2004,3 +2004,10 @@ body.modal-open .floating-contact{visibility:hidden}
 .visit-gallery .photo-open::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:rgb(35 61 54 / 18%);opacity:0;transition:opacity .15s}
 .visit-gallery .photo-open:has(.photo-magnifier.is-visible)::after{opacity:1}
 @media(prefers-reduced-motion:reduce){.visit-gallery .photo-open::after{transition:none}}
+
+/* Mid-screen contact shortcut with scroll-follow lag. */
+.floating-contact{top:50%;bottom:auto;transform:translateY(calc(-50% + var(--follow-offset,0px)));transition:background .2s,box-shadow .2s;min-height:108px}
+.floating-contact span{text-align:center;line-height:1.4}
+.floating-contact:hover{transform:translateY(calc(-50% + var(--follow-offset,0px)))}
+@media(max-width:580px){.floating-contact{top:50%;bottom:auto;min-height:96px}}
+@media(prefers-reduced-motion:reduce){.floating-contact,.floating-contact:hover{transform:translateY(-50%);transition:none}}
