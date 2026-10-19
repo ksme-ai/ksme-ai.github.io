@@ -117,7 +117,7 @@ document.querySelectorAll(".visit-gallery .photo-open").forEach(trigger => {
   const settle = time => {
     const elapsed = Math.min(64, time - (lastTime || time));
     lastTime = time;
-    offset *= Math.exp(-elapsed / 180);
+    offset *= Math.exp(-elapsed / 55);
     if (Math.abs(offset) < .2) { offset = 0; frame = 0; lastTime = 0; paint(); return; }
     paint();
     frame = requestAnimationFrame(settle);
@@ -127,8 +127,8 @@ document.querySelectorAll(".visit-gallery .photo-open").forEach(trigger => {
     const delta = window.scrollY - lastScroll;
     lastScroll = window.scrollY;
     if (reduced.matches) return;
-    const limit = Math.min(85, window.innerHeight * .12);
-    offset = Math.max(-limit, Math.min(limit, offset - delta * .32));
+    const limit = Math.min(20, window.innerHeight * .035);
+    offset = Math.max(-limit, Math.min(limit, offset - delta * .14));
     paint();
     if (!frame) frame = requestAnimationFrame(settle);
   }, {passive:true});
