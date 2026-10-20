@@ -2013,3 +2013,8 @@ body.modal-open .floating-contact{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.floating-contact,.floating-contact:hover{transform:translateY(-50%);transition:none}}
 
 .site-footer .container{flex-wrap:wrap;gap:22px}.site-footer .site-manager{font-size:16px;line-height:1.8}.site-footer .site-manager a{font-size:16px;text-decoration:underline;text-underline-offset:4px}
+
+/* Published member research PDFs */
+a.member-research{background:#edf4ee;color:#205f48;border-color:#b9d0c0;text-decoration:none;font-weight:700}
+a.member-research:hover{background:#dfeee3;border-color:#286d50}
+a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
