@@ -11,3 +11,6 @@ node_modules/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Reviewed public faculty research summaries.
+!assets/research/*.pdf
