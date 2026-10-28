@@ -2018,3 +2018,7 @@ body.modal-open .floating-contact{visibility:hidden}
 a.member-research{background:#edf4ee;color:#205f48;border-color:#b9d0c0;text-decoration:none;font-weight:700}
 a.member-research:hover{background:#dfeee3;border-color:#286d50}
 a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
+
+.member-photo-pending{display:grid;place-items:center;color:#69716d;background:#f0f2ee;font-size:16px}
+.member-photo-pending:hover{outline:none}
+.member-homepage:disabled{color:#69716d;background:#f4f4f2;border-color:#e1e4de;cursor:default}
