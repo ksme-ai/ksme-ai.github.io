@@ -2046,3 +2046,6 @@ a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
   .credits .team{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
   .credits .team > span{white-space:normal}
 }
+/* Keep the main title on one line within its own column. */
+.hero-copy{min-width:0;container-type:inline-size}
+#hero-title{white-space:nowrap;font-size:clamp(24px,9cqw,60px)}
