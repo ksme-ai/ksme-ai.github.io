@@ -2022,3 +2022,27 @@ a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
 .member-photo-pending{display:grid;place-items:center;color:#69716d;background:#f0f2ee;font-size:16px}
 .member-photo-pending:hover{outline:none}
 .member-homepage:disabled{color:#69716d;background:#f4f4f2;border-color:#e1e4de;cursor:default}
+
+/* Distinguish section titles from the keywords within each section. */
+.intro-columns > div > h3,
+.intro-directions > h3,
+.intro-team > h3 {
+  padding:14px 20px;
+  border-left:5px solid var(--green);
+  background:#edf3ee;
+  color:var(--green);
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-.025em;
+}
+.credits {grid-template-columns:1fr;gap:36px}
+.credits .team {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+.credits .team > span {display:block;white-space:nowrap}
+.credits .team b {display:block;margin:0 0 6px;font-size:22px}
+.credits .record-note {border-left:0;border-top:1px solid var(--line);padding:24px 0 0}
+@media(max-width:900px){.credits .team{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:580px){
+  .intro-columns > div > h3,.intro-directions > h3,.intro-team > h3{font-size:25px;padding:12px 16px}
+  .credits .team{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
+  .credits .team > span{white-space:normal}
+}
