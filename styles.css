@@ -2049,3 +2049,25 @@ a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
 /* Keep the main title on one line within its own column. */
 .hero-copy{min-width:0;container-type:inline-size}
 #hero-title{white-space:nowrap;font-size:clamp(24px,9cqw,60px)}
+
+/* Application-first hero and concise cooperation overview. */
+.hero{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start;gap:48px;padding-block:48px}
+.hero-copy{padding-top:20px}
+.hero-inquiry{min-width:0;background:#fff;border:1px solid var(--line);border-top:4px solid var(--green);border-radius:12px;padding:26px 22px;scroll-margin-top:110px}
+.hero-inquiry h2{font-size:28px;line-height:1.45;margin:10px 0}
+.form-intro{font-size:18px;line-height:1.7;color:var(--muted);margin-bottom:18px}
+.hero-inquiry #inquiry-frame{width:100%;border:0;min-height:680px;background:white}
+.visit-starts{display:grid;gap:16px;margin-top:28px}
+.visit-starts>div{padding:18px 22px;background:#edf3ee;border-left:4px solid var(--green)}
+.visit-starts strong{display:block;font-size:24px;color:var(--green)}
+.visit-starts span{display:block;font-size:22px;font-weight:700;margin-top:5px}
+.visit-starts p,.schedule-note{font-size:18px;line-height:1.7;color:var(--muted);margin-top:8px}
+.hero-actions{margin-top:24px;grid-template-columns:1fr 1fr;max-width:none}
+.hero-actions .button-contact{grid-column:1/-1}
+.cooperation-list{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cooperation-list>div{padding:24px;border:1px solid var(--line);border-radius:8px}
+.cooperation-list .cooperation-primary{background:#edf3ee;border-color:#c8d9cf}
+.cooperation-list dt{font-size:24px;color:var(--green)}
+.cooperation-list a{display:inline-block;margin-top:18px;color:var(--green);font-size:18px;font-weight:700;text-underline-offset:5px}
+@media(max-width:1000px){.hero{grid-template-columns:1fr;gap:28px}.hero-copy{max-width:none}.hero-inquiry{scroll-margin-top:110px}}
+@media(max-width:580px){.hero{padding-block:28px}.hero-inquiry{padding:22px 12px}.hero-inquiry h2{font-size:25px}.cooperation-list{grid-template-columns:1fr}.hero-actions{grid-template-columns:1fr}.hero-actions .button-contact{grid-column:auto}.visit-starts strong{font-size:22px}}
