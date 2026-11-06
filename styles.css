@@ -2071,3 +2071,13 @@ a.member-research:focus-visible{outline:3px solid #286d50;outline-offset:3px}
 .cooperation-list a{display:inline-block;margin-top:18px;color:var(--green);font-size:18px;font-weight:700;text-underline-offset:5px}
 @media(max-width:1000px){.hero{grid-template-columns:1fr;gap:28px}.hero-copy{max-width:none}.hero-inquiry{scroll-margin-top:110px}}
 @media(max-width:580px){.hero{padding-block:28px}.hero-inquiry{padding:22px 12px}.hero-inquiry h2{font-size:25px}.cooperation-list{grid-template-columns:1fr}.hero-actions{grid-template-columns:1fr}.hero-actions .button-contact{grid-column:auto}.visit-starts strong{font-size:22px}}
+
+/* Wider application panel with a bounded, independently scrollable form. */
+.hero.container{max-width:1560px;width:calc(100% - 64px);grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:36px}
+.hero-description,.schedule-note,.form-intro,.visit-starts p{word-break:keep-all;overflow-wrap:break-word;text-wrap:pretty}
+.keep-phrase{white-space:nowrap}
+.hero-inquiry{padding:22px 18px}
+.hero-inquiry #inquiry-frame{min-height:600px;height:720px;max-height:720px}
+.form-scroll-hint{font-size:16px;line-height:1.6;color:var(--muted);margin:0 0 12px}
+@media(max-width:1000px){.hero.container{grid-template-columns:1fr;width:calc(100% - 40px)}.hero-inquiry #inquiry-frame{height:650px;max-height:650px}.hero-description br{display:none}}
+@media(max-width:580px){.hero.container{width:calc(100% - 32px)}.hero-inquiry{padding:20px 10px}.hero-inquiry #inquiry-frame{height:600px;max-height:600px}}
